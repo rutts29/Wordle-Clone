@@ -1,0 +1,97 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    overflow: scroll;
+    background-color: black;
+    font: sans-serif;
+}
+
+header {
+    background-color: darkgreen;
+    color: #fff;
+    padding: 15px;
+    font-size: 1em;
+    text-transform: uppercase;
+}
+
+.title {
+    display: flex;
+    perspective: 1000px;
+    justify-content: center;
+
+}
+
+.title span {
+    font-family: 'Courier New', monospace;
+    font-size: 1.3em;
+    margin: 0.1em;
+    padding: 0.2em 0.4em;
+    background: rgb(249, 249, 2);
+    border: 1px solid #333;
+    border-radius: 0.2em;
+    transform-style: preserve-3d;
+    animation: flip 5s infinite;
+    color: black;
+}
+
+@keyframes flip {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    50% {
+        transform: rotateY(180deg);
+    }
+
+
+}
+
+#space {
+    padding: 20px;
+    background: none;
+    border: none;
+}
+
+.loading-sign {
+    animation: spin 2.5s linear infinite;
+    padding: 3%;
+    font-size: 3em;
+    visibility: hidden;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.game-board {
+    max-width: 295px;
+    width: 100%;
+    margin: 10px auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    row-gap: 10px;
+    column-gap: 5px;
+}
+
+.game-board__word {
+    height: 45px;
+    width: 45px;
+    font-size: 30px;
+    text-transform: uppercase;
+    border: 3px solid #ccc;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
