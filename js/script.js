@@ -8,7 +8,7 @@ async function init() {
     let done = false;
     let isLoading = true;
 
-    const red = await fetch("https://words.dev-apis.com/word-of-the-day");
+    const res = await fetch("https://words.dev-apis.com/word-of-the-day");
     const { word: wordRes } = await res.json();
     const word = wordRes.toUpperCase();
     const wordParts = word.split("");
@@ -27,57 +27,57 @@ async function init() {
 
     async function commit() {
         if (currentGuess.length != answerLength) return;
-    }
 
-    isLoading = true;
-    setLoading(isLoading);
-    const res = await fetch("https://words.dev-apis.com/validate-word", {
-        method: "POST",
-        body: JSON.stringify({ word: currentGuess }),
-    });
-    const { validWord } = await res.json();
-    isLoading = false;
-    setLoading(isLoading);
-    if (!validWord) {
-        markInvalidWord();
-        return;
-    }
-    const guessParts = currentGuess.split("");
-    const map = makeMap(wordParts);
-    let allRight = true;
 
-    for (let i = 0; i < answerLength; i++) {
-        if (guessParts[i] === wordParts[i]) {
-            markCorrectLetter(i);
-            letters[currentRow * answerLength + i].classList.add("correct");
-            map[guessParts[i]]--;
+        isLoading = true;
+        setLoading(isLoading);
+        const res = await fetch("https://words.dev-apis.com/validate-word", {
+            method: "POST",
+            body: JSON.stringify({ word: currentGuess }),
+        });
+        const { validWord } = await res.json();
+        isLoading = false;
+        setLoading(isLoading);
+        if (!validWord) {
+            markInvalidWord();
+            return;
+        }
+        const guessParts = currentGuess.split("");
+        const map = makeMap(wordParts);
+        let allRight = true;
+
+        for (let i = 0; i < answerLength; i++) {
+            if (guessParts[i] === wordParts[i]) {
+                markCorrectLetter(i);
+                letters[currentRow * answerLength + i].classList.add("correct");
+                map[guessParts[i]]--;
+            }
+        }
+
+        for (let i = 0; i < answerLength; i++) {
+            if (guessParts[i] === wordParts[i]) {
+
+            } else if (map[guessParts[i]] && map[guessParts[i]] > 0) {
+                allRight = false;
+                letters[currentRow * answerLength + i].classList.add("close");
+                map[guessParts[i]]--;
+            } else {
+                allRight = false;
+                letters[currentRow * answerLength + i].classList.add("wrong");
+            }
+        }
+        currentRow++;
+        currentGuess = "";
+        if (allRight) {
+            alert("You won!");
+            document.querySelector(".title").classList.add("winner");
+            done = true;
+        } else if (currentRow === rounds) {
+            alert("You lost!");
+            document.querySelector(".title").classList.add("loser");
+            done = true;
         }
     }
-
-    for (let i = 0; i < answerLength; i++) {
-        if (guessParts[i] === wordParts[i]) {
-
-        } else if (map[guessParts[i]] && map[guessParts[i]] > 0) {
-            allRight = false;
-            letters[currentRow * answerLength + i].classList.add("close");
-            map[guessParts[i]]--;
-        } else {
-            allRight = false;
-            letters[currentRow * answerLength + i].classList.add("wrong");
-        }
-    }
-    currentRow++;
-    currentGuess = "";
-    if (allRight) {
-        alert("You won!");
-        document.querySelector(".brand").classList.add("winner");
-        done = true;
-    } else if (currentRow === rounds) {
-        alert("You lost!");
-        document.querySelector(".brand").classList.add("loser");
-        done = true;
-    }
-
     function backspace() {
         currentGuess = currentGuess.substring(0, currentGuess.length - 1);
         letters[currentRow * answerLength + currentGuess.length].innerText = "";
@@ -110,29 +110,27 @@ async function init() {
     function isLetter(letter) {
         return /^[a-zA-Z]$/.test(letter);
     }
+}
+// show the loading spinner when needed
+function setLoading(isLoading) {
+    loadingSign.classList.toggle("hidden", !isLoading);
+}
 
-    // show the loading spinner when needed
-    function setLoading(isLoading) {
-        loadingDiv.classList.toggle("hidden", !isLoading);
-    }
-
-    // takes an array of letters (like ['E', 'L', 'I', 'T', 'E']) and creates
-    // an object out of it (like {E: 2, L: 1, T: 1}) so we can use that to
-    // make sure we get the correct amount of letters marked close instead
-    // of just wrong or correct
-    function makeMap(array) {
-        const obj = {};
-        for (let i = 0; i < array.length; i++) {
-            if (obj[array[i]]) {
-                obj[array[i]]++;
-            } else {
-                obj[array[i]] = 1;
-            }
+// takes an array of letters (like ['E', 'L', 'I', 'T', 'E']) and creates
+// an object out of it (like {E: 2, L: 1, T: 1}) so we can use that to
+// make sure we get the correct amount of letters marked close instead
+// of just wrong or correct
+function makeMap(array) {
+    const obj = {};
+    for (let i = 0; i < array.length; i++) {
+        if (obj[array[i]]) {
+            obj[array[i]]++;
+        } else {
+            obj[array[i]] = 1;
         }
-        return obj;
     }
-
-    init();
+    return obj;
 
 }
 
+init();
