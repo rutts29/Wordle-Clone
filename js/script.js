@@ -1,7 +1,7 @@
 const answerLength = 5;
 const rounds = 6;
-const letters = document.querySelectorAll('.game-board__word');
-const loadingSign = document.querySelector('.loading-sign');
+const letters = document.querySelectorAll(`.game-board__word`);
+const loadingSign = document.querySelector(`.loading-sign`);
 async function init() {
     let currentRow = 0;
     let currentGuess = "";
@@ -12,6 +12,7 @@ async function init() {
     const { word: wordRes } = await res.json();
     const word = wordRes.toUpperCase();
     const wordParts = word.split("");
+    isLoading = false;
     setLoading(isLoading);
 
     function addLetter(letter) {
@@ -26,7 +27,7 @@ async function init() {
     }
 
     async function commit() {
-        if (currentGuess.length != answerLength) return;
+        if (currentGuess.length !== answerLength) return;
 
 
         isLoading = true;
@@ -38,6 +39,7 @@ async function init() {
         const { validWord } = await res.json();
         isLoading = false;
         setLoading(isLoading);
+
         if (!validWord) {
             markInvalidWord();
             return;
@@ -48,7 +50,6 @@ async function init() {
 
         for (let i = 0; i < answerLength; i++) {
             if (guessParts[i] === wordParts[i]) {
-                markCorrectLetter(i);
                 letters[currentRow * answerLength + i].classList.add("correct");
                 map[guessParts[i]]--;
             }
@@ -74,7 +75,6 @@ async function init() {
             done = true;
         } else if (currentRow === rounds) {
             alert("You lost!");
-            document.querySelector(".title").classList.add("loser");
             done = true;
         }
     }
@@ -84,10 +84,11 @@ async function init() {
     }
 
     function markInvalidWord() {
-        letters[currentRow * answerLength + currentGuess.length].classList.add("invalid");
+        letters[currentRow * answerLength + i].classList.remove("invalid");
 
-        setTimeout(() => letters[currentRow * answerLength + currentGuess.length].classList.remove("invalid"), 10);
+        setTimeout(() => letters[currentRow * answerLength + i].classList.add("invalid"), 10);
     }
+
 
     document.addEventListener("keydown", function handleKeyPress(event) {
         if (done || isLoading) {
@@ -110,27 +111,27 @@ async function init() {
     function isLetter(letter) {
         return /^[a-zA-Z]$/.test(letter);
     }
-}
-// show the loading spinner when needed
-function setLoading(isLoading) {
-    loadingSign.classList.toggle("hidden", !isLoading);
-}
 
-// takes an array of letters (like ['E', 'L', 'I', 'T', 'E']) and creates
-// an object out of it (like {E: 2, L: 1, T: 1}) so we can use that to
-// make sure we get the correct amount of letters marked close instead
-// of just wrong or correct
-function makeMap(array) {
-    const obj = {};
-    for (let i = 0; i < array.length; i++) {
-        if (obj[array[i]]) {
-            obj[array[i]]++;
-        } else {
-            obj[array[i]] = 1;
-        }
+    // show the loading spinner when needed
+    function setLoading(isLoading) {
+        loadingSign.classList.toggle("hidden", !isLoading);
     }
-    return obj;
 
+    // takes an array of letters (like ['E', 'L', 'I', 'T', 'E']) and creates
+    // an object out of it (like {E: 2, L: 1, T: 1}) so we can use that to
+    // make sure we get the correct amount of letters marked close instead
+    // of just wrong or correct
+    function makeMap(array) {
+        const obj = {};
+        for (let i = 0; i < array.length; i++) {
+            if (obj[array[i]]) {
+                obj[array[i]]++;
+            } else {
+                obj[array[i]] = 1;
+            }
+        }
+        return obj;
+
+    }
 }
-
 init();
