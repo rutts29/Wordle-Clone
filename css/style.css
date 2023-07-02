@@ -23,7 +23,6 @@ header {
     box-sizing: border-box;
 }
 
-
 .material-symbols-outlined {
 
     font-size: 1.5em;
@@ -32,7 +31,6 @@ header {
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
-
 
 .buttons {
     display: flex;
@@ -67,8 +65,6 @@ header {
     50% {
         transform: rotateY(180deg);
     }
-
-
 }
 
 #space {
@@ -107,7 +103,7 @@ header {
     margin-bottom: 4.7%;
 }
 
-.game-board__word {
+.gameboard-word {
     height: 45px;
     width: 45px;
     font-size: 30px;
