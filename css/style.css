@@ -6,17 +6,37 @@ body {
     padding: 0;
     margin: 0;
     text-align: center;
-    overflow: scroll;
+    overflow: hidden;
     font: sans-serif;
-    background-color: #2a2a2a;
+    background-color: #171717;
 }
 
 header {
-    background-color: darkgreen;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    background-color: 171717;
     color: #fff;
-    padding: 15px;
     font-size: 1em;
     text-transform: uppercase;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+
+.material-symbols-outlined {
+
+    font-size: 1.5em;
+    color: #fff;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .title {
@@ -31,7 +51,7 @@ header {
     font-size: 1.3em;
     margin: 0.1em;
     padding: 0.2em 0.4em;
-    background: rgb(249, 249, 2);
+    background: white;
     border: 1px solid #333;
     border-radius: 0.2em;
     transform-style: preserve-3d;
@@ -58,10 +78,11 @@ header {
 }
 
 .loading-sign {
-    animation: spin 2.5s linear infinite;
-    padding: 3%;
+    animation: spin 1.5s linear infinite;
     font-size: 3em;
-    visibility: hidden;
+    margin: 3%;
+    color: #fff;
+
 }
 
 @keyframes spin {
@@ -83,6 +104,7 @@ header {
     row-gap: 10px;
     column-gap: 5px;
     color: white;
+    margin-bottom: 4.7%;
 }
 
 .game-board__word {
@@ -96,4 +118,11 @@ header {
     align-items: center;
     justify-content: center;
     color: white;
+}
+
+footer {
+    text-align: left;
+    color: #fff;
+    font-size: 1em;
+    padding: 15px;
 }

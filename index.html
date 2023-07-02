@@ -6,12 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Masters</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
 </head>
 <!-- NY Times Wordle Clone -->
 
 <body>
     <header>
+        <span class="material-symbols-outlined menu-button">
+            menu
+        </span>
         <h1 class="title">
             <span>W</span>
             <span>o</span>
@@ -26,9 +31,25 @@
             <span>r</span>
             <span>s</span>
         </h1>
+        <div class="buttons">
+            <span class="material-symbols-outlined ranking-button">
+                military_tech
+            </span>
+            <span class="material-symbols-outlined setting-button">
+                settings
+            </span>
+            <span class="material-symbols-outlined help-button">
+                help
+            </span>
+        </div>
     </header>
+
+
+
     <div class="app-content">
-        <div class="loading-sign">🔃</div>
+        <div class="loading-bar">
+            <div class="loading-sign">𖦹</div>
+        </div>
         <div class="game-board">
             <div class="game-board__word" id="alphabet-1"></div>
             <div class="game-board__word" id="alphabet-2"></div>
@@ -62,8 +83,8 @@
             <div class="game-board__word" id="alphabet-30"></div>
 
         </div>
-
     </div>
+    <footer>© Ruttansh Bhatelia, July 2023</footer>
     <script src="js/script.js"></script>
 
 </body>
