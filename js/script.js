@@ -4,12 +4,14 @@ const ANSWER_LENGTH = 5;
 async function init() {
     let currentGuess = ''; //buffer variable to store current guess which is empty at first
     let currentRow = 0; //tracker variable to keep track of current row
+    let isLoading = true;
 
     const res = await fetch('https://words.dev-apis.com/word-of-the-day');  //fetches the word of the day from the api
     const resObj = await res.json(); //converts the response to json and extracts the word from it
     const word = resObj.word.toUpperCase(); //converts the word to uppercase
     const wordParts = word.split(''); //splits the actual word from API into an array of letters
-
+    let done = false;
+    isLoading = false;
     setLoading(false); //sets the loading to false once the word is fetched so that the loading bar disappears
 
     function addLetter(letter) {
@@ -29,9 +31,9 @@ async function init() {
             return;
         }
 
+
         const guessParts = currentGuess.split(''); //splits the current guess into an array of letters
         const map = makeMap(wordParts); //creates a map of the actual word letters
-        console.log(map);
 
         for (let i = 0; i < ANSWER_LENGTH; i++) { //loops through the answer length
             if (guessParts[i] === wordParts[i]) { //checks if the current guess letter is equal to the actual word letter
@@ -49,14 +51,17 @@ async function init() {
                 letters[currentRow * ANSWER_LENGTH + i].classList.add('wrong');
             }
         }
+
         currentRow++;
+        if (currentGuess === word) { //if the current guess is equal to the actual word, then it adds the correct class to the letters
+            showMessage('YOU WIN!');
+            done = true;
+            return;
+        } else if (currentRow === 6) {
+            showMessage(`YOU LOSE! THE WORD WAS: ${word} `);
+            done = true;
+        }
         currentGuess = '';
-
-
-
-
-
-
 
     }
 
@@ -66,6 +71,9 @@ async function init() {
     }
 
     document.addEventListener('keydown', function handleKeyPress(event) {
+        if (done || isLoading) {
+            return;
+        }
         const action = event.key;
         if (action === 'Enter') {
             commit();
@@ -83,6 +91,14 @@ function isLetter(letter) {
 
 function setLoading(isLoading) {
     loadingDiv.classList.toggle('hidden', !isLoading);
+}
+
+function showMessage(message) {
+    const messageBox = document.getElementById('message-box');
+    const messageText = document.querySelector('.message');
+
+    messageText.innerText = message;
+    messageBox.classList.remove('hidden');
 }
 
 function makeMap(array) {
