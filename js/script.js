@@ -30,8 +30,22 @@ async function init() {
         if (currentGuess.length != ANSWER_LENGTH) {  // if the current guess length is not equal to the answer length, then it does nothing.
             return;
         }
+        isLoading = true;
+        setLoading(true);
+        const res = await fetch("https://words.dev-apis.com/validate-word", {
+            method: 'POST',
+            body: JSON.stringify({ word: currentGuess })
+        });
 
+        const resObj = await res.json();
+        const { validWord } = resObj;
+        isLoading = false;
+        setLoading(false);
 
+        if (!validWord) {
+            showMessage('INVALID WORD!', 'invalidword', 1250);
+            return;
+        }
         const guessParts = currentGuess.split(''); //splits the current guess into an array of letters
         const map = makeMap(wordParts); //creates a map of the actual word letters
 
@@ -54,11 +68,11 @@ async function init() {
 
         currentRow++;
         if (currentGuess === word) { //if the current guess is equal to the actual word, then it adds the correct class to the letters
-            showMessage('YOU WIN!');
+            showMessage('YOU WIN!', 'winner');
             done = true;
             return;
         } else if (currentRow === 6) {
-            showMessage(`YOU LOSE! THE WORD WAS: ${word} `);
+            showMessage(`YOU LOSE! THE WORD WAS: ${word} `, 'invalidword');
             done = true;
         }
         currentGuess = '';
@@ -93,12 +107,18 @@ function setLoading(isLoading) {
     loadingDiv.classList.toggle('hidden', !isLoading);
 }
 
-function showMessage(message) {
+function showMessage(message, className, timeout) {
     const messageBox = document.getElementById('message-box');
     const messageText = document.querySelector('.message');
 
     messageText.innerText = message;
+    messageBox.classList.add(className);
     messageBox.classList.remove('hidden');
+    if (timeout) {
+        setTimeout(() => {
+            messageBox.classList.add('hidden');
+        }, timeout);
+    }
 }
 
 function makeMap(array) {

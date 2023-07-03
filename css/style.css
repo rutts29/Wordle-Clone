@@ -138,15 +138,15 @@ footer {
 }
 
 .wrong {
-    background-color: #a50d0d;
+    background-color: #676060;
     color: white;
 }
 
-.invalid {
-    animation: flash 1s;
+.invalidword {
+    color: crimson;
 }
 
-/* flashes red border and then fades back to gray */
+/* flashes red border and then fades back to gray 
 @keyframes flash {
     5% {
         border-color: crimson;
@@ -156,7 +156,7 @@ footer {
         border-color: #ccc;
     }
 }
-
+*/
 
 /* winner animation */
 
@@ -236,6 +236,7 @@ footer {
     background-color: #fff;
     border-radius: 4px;
     animation: blink 1s infinite;
+    font-family: 'Courier New', monospace;
 }
 
 @keyframes blink {
@@ -244,7 +245,7 @@ footer {
     }
 
     50% {
-        opacity: 0.5;
+        opacity: .75;
     }
 
     100% {
