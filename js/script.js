@@ -8,6 +8,9 @@ async function init() {
     const res = await fetch('https://words.dev-apis.com/word-of-the-day');  //fetches the word of the day from the api
     const resObj = await res.json(); //converts the response to json and extracts the word from it
     const word = resObj.word.toUpperCase(); //converts the word to uppercase
+    const wordParts = word.split(''); //splits the actual word from API into an array of letters
+
+    setLoading(false); //sets the loading to false once the word is fetched so that the loading bar disappears
 
 
     function addLetter(letter) {
@@ -25,6 +28,25 @@ async function init() {
     async function commit() {
         if (currentGuess.length != ANSWER_LENGTH) {  // if the current guess length is not equal to the answer length, then it does nothing.
             return;
+        }
+
+        const guessParts = currentGuess.split(''); //splits the current guess into an array of letters
+        const map = makeMap(wordParts); //creates a map of the actual word letters
+
+        for (let i = 0; i < ANSWER_LENGTH; i++) { //loops through the answer length
+            if (guessParts[i] === wordParts[i]) { //checks if the current guess letter is equal to the actual word letter
+                letters[currentRow * ANSWER_LENGTH + i].classList.add('correct'); //if it is, then it adds the correct class to the letter
+                map[guessParts[i]]--; //decrements the count of the letter in the map
+            }
+        }
+
+        for (let i = 0; i < ANSWER_LENGTH; i++) {
+            if (guessParts[i] === wordParts[i]) {
+            } else if (wordParts.includes(guessParts[i]) && map[guessParts[i] > 0]) {
+                letters[currentRow * ANSWER_LENGTH + i].classList.add('close');
+            } else {
+                letters[currentRow * ANSWER_LENGTH + i].classList.add('wrong');
+            }
         }
         currentRow++;
         currentGuess = '';
@@ -63,5 +85,21 @@ async function init() {
 
 function isLetter(letter) {
     return /^[a-zA-Z]$/.test(letter);
+}
+
+function setLoading(isLoading) {
+    loadingDiv.classList.toggle('hidden', !isLoading);
+}
+
+function makeMap(array) {
+    const obj = {};
+    for (let i = 0; i < array.length; i++) {
+        const letter = array[i];
+        if (obj[letter]) {
+            obj[letter]++;
+        } else {
+            obj[letter] = 1;
+        }
+    } return obj;
 }
 init();
