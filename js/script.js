@@ -12,7 +12,6 @@ async function init() {
 
     setLoading(false); //sets the loading to false once the word is fetched so that the loading bar disappears
 
-
     function addLetter(letter) {
         if (currentGuess.length < ANSWER_LENGTH) {
             currentGuess += letter; /*adds the letter to the current guess and checks if the length of the current guess is less
@@ -32,18 +31,20 @@ async function init() {
 
         const guessParts = currentGuess.split(''); //splits the current guess into an array of letters
         const map = makeMap(wordParts); //creates a map of the actual word letters
+        console.log(map);
 
         for (let i = 0; i < ANSWER_LENGTH; i++) { //loops through the answer length
             if (guessParts[i] === wordParts[i]) { //checks if the current guess letter is equal to the actual word letter
                 letters[currentRow * ANSWER_LENGTH + i].classList.add('correct'); //if it is, then it adds the correct class to the letter
-                map[guessParts[i]]--; //decrements the count of the letter in the map
+                map[guessParts[i]]--; //decrements the count of the letter in the map to keep track of the letters that are already guessed
             }
         }
 
         for (let i = 0; i < ANSWER_LENGTH; i++) {
             if (guessParts[i] === wordParts[i]) {
-            } else if (wordParts.includes(guessParts[i]) && map[guessParts[i] > 0]) {
+            } else if (wordParts.includes(guessParts[i]) && map[guessParts[i]] > 0) {
                 letters[currentRow * ANSWER_LENGTH + i].classList.add('close');
+                map[guessParts[i]]--;
             } else {
                 letters[currentRow * ANSWER_LENGTH + i].classList.add('wrong');
             }
@@ -63,13 +64,6 @@ async function init() {
         currentGuess = currentGuess.substring(0, currentGuess.length - 1); //removes the last letter from the current guess
         letters[ANSWER_LENGTH * currentRow + currentGuess.length].innerText = ''; //updates the letter(s) on the screen}
     }
-
-
-
-
-
-
-
 
     document.addEventListener('keydown', function handleKeyPress(event) {
         const action = event.key;
@@ -100,6 +94,7 @@ function makeMap(array) {
         } else {
             obj[letter] = 1;
         }
-    } return obj;
+    }
+    return obj;
 }
 init();
