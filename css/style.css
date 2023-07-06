@@ -54,7 +54,7 @@ header {
     border: 1px solid #333;
     border-radius: 0.2em;
     transform-style: preserve-3d;
-    animation: flip 2s;
+    animation: flip 3.5s;
     color: black;
 }
 
